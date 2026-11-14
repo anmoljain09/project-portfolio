@@ -120,5 +120,10 @@ app.get('/', (req, res) => {
     res.send(renderPage());
 });
 
-// 6. Start server
+// 6. Not Found Route
+app.use((req, res) => {
+    res.status(404).send('Page not found');
+});
+
+// 7. Start server
 app.listen(process.env.PORT || 3000);
