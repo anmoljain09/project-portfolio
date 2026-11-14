@@ -78,13 +78,27 @@ const md = new MarkdownIt();
 app.use(express.static('public'));
 
 // 3. Markdown rendering function
-function renderMarkdown(file) {
-    const markdown = fs.readFileSync(
-        path.join(__dirname, 'content', file + '.md'),
-        'utf8'
-    );
+// function renderMarkdown(file) {
+//     const markdown = fs.readFileSync(
+//         path.join(__dirname, 'content', file + '.md'),
+//         'utf8'
+//     );
 
-    return md.render(markdown);
+//     return md.render(markdown);
+// }
+function renderMarkdown(file) {
+    try {
+        const markdown = fs.readFileSync(
+            path.join(__dirname, 'content', file + '.md'),
+            'utf8'
+        );
+
+        return md.render(markdown);
+    } catch (err) {
+        if (err.code === 'ENOENT') {
+            console.log(`No content for ${file}, skipping`);
+        }
+    }
 }
 
 // 4. HTML template rendering function
