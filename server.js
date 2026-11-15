@@ -77,7 +77,14 @@ const md = new MarkdownIt();
 // 2. Static files
 app.use(express.static('public'));
 
-// 3. Markdown rendering function
+// 3. EXPERIENCE
+const EXPERIENCE = [
+    'summer-project-training',
+    'summer-training',
+    'project-portfolio'
+];
+
+// 4. Markdown rendering function
 // function renderMarkdown(file) {
 //     const markdown = fs.readFileSync(
 //         path.join(__dirname, 'content', file + '.md'),
@@ -101,7 +108,7 @@ function renderMarkdown(file) {
     }
 }
 
-// 4. HTML template rendering function
+// 5. HTML template rendering function
 function renderPage() {
     let html = fs.readFileSync(
         path.join(__dirname, 'views', 'index.html'),
@@ -115,15 +122,34 @@ function renderPage() {
     return html;
 }
 
-// 5. Route
+// 6. Home Route
 app.get('/', (req, res) => {
     res.send(renderPage());
 });
 
-// 6. Not Found Route
+// 7. Work Route
+app.get('/:work', (req, res) => {
+    const work = req.params.work;
+
+    if (!EXPERIENCE.includes(work)) {
+        return res.status(404).send('Page not found');
+    }
+
+    // Render work page
+    let html = fs.readFileSync(
+        path.join(__dirname, 'views', 'work.html'),
+        'utf8'
+    );
+
+    html = html.replace('{{work}}', renderMarkdown(work));
+
+    res.send(html);
+});
+
+// 8. Not Found Route
 app.use((req, res) => {
     res.status(404).send('Page not found');
 });
 
-// 7. Start server
+// 9. Start server
 app.listen(process.env.PORT || 3000);
