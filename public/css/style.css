@@ -297,11 +297,13 @@ td {
 
 #start,
 #experience,
-#end {
+#end,
+#work {
     position: relative;
 }
 
-#experience {
+#experience,
+#work {
     padding-top: 10px;
 }
 
